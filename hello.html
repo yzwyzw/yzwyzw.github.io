@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+##Hello
+
+This is a `test` `抑音符实现背景色` .
+
+You can write LaTex myth symbol like $x^3=1$.
+
+You need to write the markdown, [here](http://www.jianshu.com/p/1e402922ee32/) is a  brief guide.
+
+For programmers, code is necessary.
+
+~~~~{python}
+print "hello world!"
+~~~~
+
+Enjoy and lots of thanks to the Simple project.
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h2 id="hello">Hello</h2>
+
+<p>This is a <code>test</code> <code>抑音符实现背景色</code> .</p>
+
+<p>You can write LaTex myth symbol like <span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mi>x</mi><mn>3</mn></msup><mo>=</mo><mn>1</mn></math>" style="position: relative;" tabindex="0" id="MathJax-Element-2-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 3.578em; display: inline-block;" role="math" id="MathJax-Span-8" class="math"><span style="display: inline-block; position: relative; width: 2.85em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.417em, 1002.78em, 2.561em, -1000em); top: -2.4em; left: 0em;"><span id="MathJax-Span-9" class="mrow"><span id="MathJax-Span-10" class="msubsup"><span style="display: inline-block; position: relative; width: 1.001em; height: 0px;"><span style="position: absolute; clip: rect(3.408em, 1000.52em, 4.161em, -1000em); top: -4em; left: 0em;"><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-11" class="mi">x</span><span style="display: inline-block; width: 0px; height: 4em;"></span></span><span style="position: absolute; top: -4.363em; left: 0.572em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-12" class="mn">3</span><span style="display: inline-block; width: 0px; height: 4em;"></span></span></span></span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-13" class="mo">=</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-14" class="mn">1</span></span><span style="display: inline-block; width: 0px; height: 2.4em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.076em; border-left: 0px solid; width: 0px; height: 1.18em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>x</mi><mn>3</mn></msup><mo>=</mo><mn>1</mn></math></span></span><script id="MathJax-Element-2" type="math/tex">x^3=1</script>.</p>
+
+<p>You need to write the markdown, <a href="http://www.jianshu.com/p/1e402922ee32/">here</a> is a  brief guide.</p>
+
+<p>For programmers, code is necessary.</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">print</span> <span class="token string">"hello world!"</span>
+</code></pre>
+
+<p>Enjoy and lots of thanks to the Simple project.</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "hello.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
